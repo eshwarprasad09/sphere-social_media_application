@@ -1,12 +1,13 @@
 package com.eshwarprasad.sphere.controller;
 
 import com.eshwarprasad.sphere.payload.PostDto;
+import com.eshwarprasad.sphere.payload.PostResponse;
 import com.eshwarprasad.sphere.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import static com.eshwarprasad.sphere.utils.AppConstants.*;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -20,21 +21,23 @@ public class PostController {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
     @GetMapping()
-    public  ResponseEntity<List<PostDto>> getAllPosts(@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-                                                      @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize){
-        return new ResponseEntity<>(postService.getAllPosts(pageNo, pageSize), HttpStatus.OK);
+    public  ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNo", defaultValue = PAGE_NUMBER, required = false) int pageNo,
+                                                     @RequestParam(value = "pageSize", defaultValue = PAGE_SIZE, required = false) int pageSize,
+                                                     @RequestParam(value = "sortBy", defaultValue = SORT_BY, required = false) String sortBy,
+                                                     @RequestParam(value = "sortDir", defaultValue = SORT_DIR, required = false) String sortDir){
+        return new ResponseEntity<>(postService.getAllPosts(pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") Long id){
+    public ResponseEntity<PostDto> getPostById(@PathVariable(name = ID) Long id){
         return ResponseEntity.ok(postService.getPostById(id));
     }
     @PutMapping("/{id}")
-    public  ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable(name = "id") Long id) {
+    public  ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable(name = ID) Long id) {
         return new ResponseEntity<>(postService.updatePost(postDto, id), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePostById(@PathVariable(name = "id") long id){
+    public ResponseEntity<String> deletePostById(@PathVariable(name = ID) long id){
         postService.deletePostById(id);
         return ResponseEntity.ok("deleted");
     }
