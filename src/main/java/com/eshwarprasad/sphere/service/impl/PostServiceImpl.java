@@ -4,11 +4,14 @@ import com.eshwarprasad.sphere.config.PostMapper;
 import com.eshwarprasad.sphere.entity.Post;
 import com.eshwarprasad.sphere.exception.ResourceNotFoundException;
 import com.eshwarprasad.sphere.payload.PostDto;
+import com.eshwarprasad.sphere.payload.PostResponse;
 import com.eshwarprasad.sphere.repository.PostRepository;
 import com.eshwarprasad.sphere.service.PostService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,9 +32,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo,pageSize);
-        return postRepository.findAll(pageable).stream().map(p -> modelMapper.map(p,PostDto.class)).toList();
+    public PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Page<Post> posts = postRepository.findAll(pageable);
+        List<PostDto> content = posts.getContent().stream().map(p -> modelMapper.map(p,PostDto.class)).toList();
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(content);
+        postResponse.setPageNo(posts.getNumber());
+        postResponse.setPageSize(posts.getSize());
+        postResponse.setTotalElements(posts.getTotalElements());
+        postResponse.setTotalPages(posts.getTotalPages());
+        postResponse.setLast(posts.isLast());
+        return postResponse;
     }
 
     @Override

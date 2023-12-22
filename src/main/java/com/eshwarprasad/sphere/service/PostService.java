@@ -1,12 +1,11 @@
 package com.eshwarprasad.sphere.service;
 
 import com.eshwarprasad.sphere.payload.PostDto;
-
-import java.util.List;
+import com.eshwarprasad.sphere.payload.PostResponse;
 
 public interface PostService {
     PostDto createPost(PostDto post);
-    List<PostDto> getAllPosts(int pageNo, int pageSize);
+    PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir);
     PostDto getPostById(Long id);
     PostDto updatePost(PostDto postDto, long id);
     void deletePostById(Long id);
