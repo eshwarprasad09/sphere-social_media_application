@@ -31,7 +31,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> getAllPosts(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo,pageSize);
-        return postRepository.findAll(pageable).stream().map(p -> modelMapper.map(p,PostDto.class)).toList();
+        return postRepository.findAll(pageable).getContent().stream().map(p -> modelMapper.map(p,PostDto.class)).toList();
     }
 
     @Override
