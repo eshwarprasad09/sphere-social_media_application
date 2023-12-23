@@ -3,6 +3,7 @@ package com.eshwarprasad.sphere.controller;
 import com.eshwarprasad.sphere.payload.PostDto;
 import com.eshwarprasad.sphere.payload.PostResponse;
 import com.eshwarprasad.sphere.service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class PostController {
         this.postService = postService;
     }
     @PostMapping()
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto){
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto){
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
     @GetMapping()
@@ -33,7 +34,7 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostById(id));
     }
     @PutMapping("/{id}")
-    public  ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable(name = ID) Long id) {
+    public  ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable(name = ID) Long id) {
         return new ResponseEntity<>(postService.updatePost(postDto, id), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
