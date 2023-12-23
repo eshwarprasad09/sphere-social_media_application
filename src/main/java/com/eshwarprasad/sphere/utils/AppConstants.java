@@ -9,4 +9,6 @@ public class AppConstants {
     public static final String SORT_DIR = "id";
     public static final String ID = "id";
 
+    public static final String COMMENT_ID = "commentId";
+
 }

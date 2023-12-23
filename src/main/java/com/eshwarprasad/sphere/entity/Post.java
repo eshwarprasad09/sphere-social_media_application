@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
+import java.util.HashSet;
+import java.util.Set;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -30,5 +32,8 @@ public class Post {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 
 }
