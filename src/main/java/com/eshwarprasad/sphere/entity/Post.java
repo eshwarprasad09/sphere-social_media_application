@@ -8,20 +8,24 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Entity
 @Table(
         name = "posts"
 )
-//,uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})}
+//, uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})}
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
     private Long id;
 
     @Column(name = "title", nullable = false)
